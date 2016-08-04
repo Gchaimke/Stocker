@@ -1,0 +1,13 @@
+d:\chaim\documents\visual studio 2015\Projects\Stocker\Stocker\bin\Debug\Stocker.exe.config
+d:\chaim\documents\visual studio 2015\Projects\Stocker\Stocker\bin\Debug\Stocker.exe
+d:\chaim\documents\visual studio 2015\Projects\Stocker\Stocker\bin\Debug\Stocker.pdb
+d:\chaim\documents\visual studio 2015\Projects\Stocker\Stocker\obj\Debug\Stocker.csprojResolveAssemblyReference.cache
+d:\chaim\documents\visual studio 2015\Projects\Stocker\Stocker\obj\Debug\Stocker.Form1.resources
+d:\chaim\documents\visual studio 2015\Projects\Stocker\Stocker\obj\Debug\Stocker.Properties.Resources.resources
+d:\chaim\documents\visual studio 2015\Projects\Stocker\Stocker\obj\Debug\Stocker.settings.resources
+d:\chaim\documents\visual studio 2015\Projects\Stocker\Stocker\obj\Debug\Stocker.csproj.GenerateResource.Cache
+d:\chaim\documents\visual studio 2015\Projects\Stocker\Stocker\obj\Debug\Stocker.exe
+d:\chaim\documents\visual studio 2015\Projects\Stocker\Stocker\obj\Debug\Stocker.pdb
+C:\Users\gchai_000\Source\Repos\Stocker\bin\Debug\Stocker.exe.config
+C:\Users\gchai_000\Source\Repos\Stocker\obj\Debug\Stocker.exe
+C:\Users\gchai_000\Source\Repos\Stocker\obj\Debug\Stocker.pdb

@@ -1,0 +1,15 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Stocker.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="product1" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Product URL</Value>
+    </Setting>
+    <Setting Name="id1" Type="System.String" Scope="User">
+      <Value Profile="(Default)">oosLimitedTag</Value>
+    </Setting>
+    <Setting Name="name1" Type="System.String" Scope="User">
+      <Value Profile="(Default)">title</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
