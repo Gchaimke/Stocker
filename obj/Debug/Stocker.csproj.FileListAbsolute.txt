@@ -11,3 +11,6 @@ d:\chaim\documents\visual studio 2015\Projects\Stocker\Stocker\obj\Debug\Stocker
 C:\Users\gchai_000\Source\Repos\Stocker\bin\Debug\Stocker.exe.config
 C:\Users\gchai_000\Source\Repos\Stocker\obj\Debug\Stocker.exe
 C:\Users\gchai_000\Source\Repos\Stocker\obj\Debug\Stocker.pdb
+C:\Users\gchai_000\Source\Repos\Stocker\Stocker\bin\Debug\Stocker.exe.config
+C:\Users\gchai_000\Source\Repos\Stocker\Stocker\obj\Debug\Stocker.exe
+C:\Users\gchai_000\Source\Repos\Stocker\Stocker\obj\Debug\Stocker.pdb
