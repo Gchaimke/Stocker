@@ -32,10 +32,8 @@
             this.BtnGetStock = new System.Windows.Forms.Button();
             this.listView1 = new System.Windows.Forms.ListView();
             this.columnHeaderProduct = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeaderStock = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderStockId = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderURL = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeaderSizes = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderColors = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.deleteSelsectedItemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -57,7 +55,7 @@
             // 
             this.BtnGetStock.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.BtnGetStock.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.BtnGetStock.Location = new System.Drawing.Point(6, 400);
+            this.BtnGetStock.Location = new System.Drawing.Point(6, 101);
             this.BtnGetStock.Name = "BtnGetStock";
             this.BtnGetStock.Size = new System.Drawing.Size(75, 43);
             this.BtnGetStock.TabIndex = 1;
@@ -70,17 +68,17 @@
             this.listView1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeaderProduct,
-            this.columnHeaderStock,
             this.columnHeaderStockId,
             this.columnHeaderURL,
-            this.columnHeaderSizes,
             this.columnHeaderColors});
             this.listView1.ContextMenuStrip = this.contextMenuStrip1;
+            this.listView1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.listView1.FullRowSelect = true;
             this.listView1.GridLines = true;
-            this.listView1.Location = new System.Drawing.Point(0, 93);
+            this.listView1.Location = new System.Drawing.Point(0, 180);
+            this.listView1.MinimumSize = new System.Drawing.Size(893, 300);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(888, 300);
+            this.listView1.Size = new System.Drawing.Size(1214, 300);
             this.listView1.TabIndex = 0;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -88,32 +86,22 @@
             // columnHeaderProduct
             // 
             this.columnHeaderProduct.Text = "Product name";
-            this.columnHeaderProduct.Width = 120;
-            // 
-            // columnHeaderStock
-            // 
-            this.columnHeaderStock.Text = "Stock";
-            this.columnHeaderStock.Width = 120;
+            this.columnHeaderProduct.Width = 80;
             // 
             // columnHeaderStockId
             // 
             this.columnHeaderStockId.Text = "Stock id";
-            this.columnHeaderStockId.Width = 90;
+            this.columnHeaderStockId.Width = 80;
             // 
             // columnHeaderURL
             // 
             this.columnHeaderURL.Text = "Product URL";
-            this.columnHeaderURL.Width = 320;
-            // 
-            // columnHeaderSizes
-            // 
-            this.columnHeaderSizes.Text = "Sizes";
-            this.columnHeaderSizes.Width = 120;
+            this.columnHeaderURL.Width = 200;
             // 
             // columnHeaderColors
             // 
             this.columnHeaderColors.Text = "Colors";
-            this.columnHeaderColors.Width = 120;
+            this.columnHeaderColors.Width = 1200;
             // 
             // contextMenuStrip1
             // 
@@ -132,7 +120,7 @@
             // BtnAddProd
             // 
             this.BtnAddProd.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.BtnAddProd.Location = new System.Drawing.Point(778, 400);
+            this.BtnAddProd.Location = new System.Drawing.Point(1092, 101);
             this.BtnAddProd.Name = "BtnAddProd";
             this.BtnAddProd.Size = new System.Drawing.Size(110, 43);
             this.BtnAddProd.TabIndex = 2;
@@ -142,9 +130,9 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(0, 449);
+            this.progressBar1.Location = new System.Drawing.Point(6, 150);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(882, 24);
+            this.progressBar1.Size = new System.Drawing.Size(1196, 24);
             this.progressBar1.TabIndex = 7;
             // 
             // label4
@@ -225,7 +213,7 @@
             // 
             this.tBProductUrl.Location = new System.Drawing.Point(223, 26);
             this.tBProductUrl.Name = "tBProductUrl";
-            this.tBProductUrl.Size = new System.Drawing.Size(665, 20);
+            this.tBProductUrl.Size = new System.Drawing.Size(979, 20);
             this.tBProductUrl.TabIndex = 36;
             this.tBProductUrl.Text = "http://www.6pm.com/adidas-go-to-performance-tank-top-black?zlfid=192&ref=pd_sims_" +
     "p_1";
@@ -234,7 +222,7 @@
             // 
             this.lblStatus.AutoSize = true;
             this.lblStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.lblStatus.Location = new System.Drawing.Point(419, 400);
+            this.lblStatus.Location = new System.Drawing.Point(400, 134);
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(43, 13);
             this.lblStatus.TabIndex = 47;
@@ -244,7 +232,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(890, 480);
+            this.ClientSize = new System.Drawing.Size(1214, 480);
             this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.TbProdName);
@@ -258,6 +246,7 @@
             this.Controls.Add(this.BtnAddProd);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.BtnGetStock);
+            this.MinimumSize = new System.Drawing.Size(909, 519);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Stocker -check if you have stock";
@@ -271,7 +260,6 @@
         private System.Windows.Forms.Button BtnGetStock;
         private System.Windows.Forms.ListView listView1;
         private System.Windows.Forms.ColumnHeader columnHeaderProduct;
-        private System.Windows.Forms.ColumnHeader columnHeaderStock;
         private System.Windows.Forms.Button BtnAddProd;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Label label4;
@@ -287,7 +275,6 @@
         private System.Windows.Forms.TextBox TbProdName;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label lblStatus;
-        private System.Windows.Forms.ColumnHeader columnHeaderSizes;
         private System.Windows.Forms.ColumnHeader columnHeaderColors;
     }
 }

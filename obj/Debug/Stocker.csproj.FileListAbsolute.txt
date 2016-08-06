@@ -14,3 +14,10 @@ C:\Users\gchai_000\Source\Repos\Stocker\obj\Debug\Stocker.pdb
 C:\Users\gchai_000\Source\Repos\Stocker\Stocker\bin\Debug\Stocker.exe.config
 C:\Users\gchai_000\Source\Repos\Stocker\Stocker\obj\Debug\Stocker.exe
 C:\Users\gchai_000\Source\Repos\Stocker\Stocker\obj\Debug\Stocker.pdb
+C:\Users\gchai_000\Source\Repos\Stocker\Stocker\bin\Debug\Stocker.exe
+C:\Users\gchai_000\Source\Repos\Stocker\Stocker\bin\Debug\Stocker.pdb
+C:\Users\gchai_000\Source\Repos\Stocker\Stocker\obj\Debug\Stocker.csprojResolveAssemblyReference.cache
+C:\Users\gchai_000\Source\Repos\Stocker\Stocker\obj\Debug\Stocker.Form1.resources
+C:\Users\gchai_000\Source\Repos\Stocker\Stocker\obj\Debug\Stocker.Properties.Resources.resources
+C:\Users\gchai_000\Source\Repos\Stocker\Stocker\obj\Debug\Stocker.settings.resources
+C:\Users\gchai_000\Source\Repos\Stocker\Stocker\obj\Debug\Stocker.csproj.GenerateResource.Cache
