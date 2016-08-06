@@ -58,5 +58,16 @@ namespace Stocker.Properties {
                 this["name1"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection ServerList {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["ServerList"]));
+            }
+            set {
+                this["ServerList"] = value;
+            }
+        }
     }
 }

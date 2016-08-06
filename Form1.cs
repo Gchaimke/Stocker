@@ -19,8 +19,7 @@ namespace Stocker
         {
             InitializeComponent();
         }
-        // Create a WebBrowser instance. 
-        string stock;
+        // Create a WebBrowser instance.
         NameValueCollection allColors = new NameValueCollection();
         NameValueCollection allSizes = new NameValueCollection();
         private void AddProduct()
@@ -34,54 +33,59 @@ namespace Stocker
 
         private void GetColorsAndSizes(HtmlElementCollection htmlcol)
         {
+            allColors.Clear();
+            allSizes.Clear();
             //get a collection of the parent "select" elements first
-                if (htmlcol[0].Name == "colorId") //if the select element is the dropdown we need to select something for
-                {
-                    //create another element collection for the child elements of the "select" element
-                    HtmlElementCollection htmlcolchild = htmlcol[0].Children;
-                    for (int j = 0; j < htmlcolchild.Count; j++)
-                    {
-                        allColors.Add (htmlcolchild[j].InnerText,htmlcolchild[j].GetAttribute("value"));
-                        
-                    }
-                }
-
-                if (htmlcol[1].Name == "dimensionValues") //if the select element is the dropdown we need to select something for
-                {
-                    //create another element collection for the child elements of the "select" element
-                    HtmlElementCollection htmlcolchild = htmlcol[1].Children;
-                    for (int j = 0; j < htmlcolchild.Count; j++)
-                    {
-                        allSizes.Add(htmlcolchild[j].InnerText, htmlcolchild[j].GetAttribute("value"));
-
-                    }
-                }
-            
+            if (htmlcol[0].Name == "colorId")
+            { //if the select element is the dropdown we need to select something for
+              //create another element collection for the child elements of the "select" element
+                HtmlElementCollection htmlcolchild = htmlcol[0].Children;
+                for (int j = 0; j < htmlcolchild.Count; j++) allColors.Add(htmlcolchild[j].InnerText, htmlcolchild[j].GetAttribute("value"));
+            }else if(htmlcol[0].Name == "dimensionValues")
+            {
+                HtmlElementCollection htmlcolchild = htmlcol[0].Children;
+                for (int j = 0; j < htmlcolchild.Count; j++) allSizes.Add(htmlcolchild[j].InnerText, htmlcolchild[j].GetAttribute("value"));
+            }
+            if (htmlcol.Count==2 && htmlcol[1].Name == "dimensionValues"){
+                HtmlElementCollection htmlcolchild = htmlcol[1].Children;
+                for (int j = 0; j < htmlcolchild.Count; j++) allSizes.Add(htmlcolchild[j].InnerText, htmlcolchild[j].GetAttribute("value"));
+            }
         }
 
-        private void chekStock(HtmlElement colorElm, HtmlElement sizeElm, NameValueCollection colors, NameValueCollection sizes, WebBrowser wb, int p) {
+        private void chekStock(HtmlElementCollection htmlcol, NameValueCollection colors, NameValueCollection sizes, WebBrowser wb, int p) {
           string strColorSizes = "";
-            for (int i=0; i<colors.Count; i++)
+          string tmp = "";
+            if (colors.Count>0)
             {
-                
-                string tmp = "";
-                strColorSizes += colors.GetKey(i)+":";
-                for (int s=1; s<sizes.Count; s++)
+                for (int i = 0; i < colors.Count; i++)
                 {
-                    if (OptionClick1(sizeElm, sizes.Get(s), wb, p) == true)
+                    OptionClick1(htmlcol[0], colors.Get(i), wb, p);
+                    strColorSizes += colors.GetKey(i) + ":";
+                    for (int s = 1; s < sizes.Count; s++)
+                    {
+                        if (OptionClick1(htmlcol[1], sizes.Get(s), wb, p) == true)
+                        {
+                            tmp += sizes.GetKey(s) + "/";
+                        }
+                    }
+                    strColorSizes += tmp + "   ";
+                    listView1.Items[p].SubItems[3].Text = strColorSizes;
+                }
+            }
+            else
+            {
+                for (int s = 1; s < sizes.Count; s++)
+                {
+                    if (OptionClick1(htmlcol[0], sizes.Get(s), wb, p) == true)
                     {
                         tmp += sizes.GetKey(s) + "/";
                     }
-
                 }
-                strColorSizes +=tmp +"   ";
+                strColorSizes += tmp + "   ";
                 listView1.Items[p].SubItems[3].Text = strColorSizes;
-
-                OptionClick1(colorElm, colors.Get(i), wb, p);
             }
-            sizes.Clear();
             
-        }
+         }
         private bool OptionClick1(HtmlElement options, string option, WebBrowser wb,int p)
         {
             if (options.Id != null)
@@ -91,7 +95,6 @@ namespace Stocker
                 options.RaiseEvent("onChange");
                 options.RemoveFocus();
             }
-            option = null;
             var product = wb.Document.GetElementById(listView1.Items[p].SubItems[1].Text);
             string getstock = "";
             getstock = product.InnerText;
@@ -129,6 +132,7 @@ namespace Stocker
                 // do whatever you want with this instance of WB.Document
                 try{
                     HtmlElementCollection htmlcol = wb.Document.GetElementsByTagName("select");
+                    if (htmlcol.Count >0) { 
                     GetColorsAndSizes(htmlcol);
                     Console.WriteLine("--------------------------------------");
                     for (int s = 0; s < allColors.Count; s++)
@@ -136,13 +140,23 @@ namespace Stocker
                     for (int s = 0; s < allSizes.Count; s++)
                         Console.WriteLine(allSizes.Get(s) + "=" + allSizes.GetKey(s));
 
-                    chekStock(htmlcol[0], htmlcol[1], allColors, allSizes, wb, i);
-                    
+                    chekStock(htmlcol, allColors, allSizes, wb, i);
+                    }else{
+                        var product = wb.Document.GetElementById(listView1.Items[i].SubItems[1].Text);
+                        string getstock = "";
+                        getstock = product.InnerText;
+                        if (!getstock.Contains("Out of Stock"))
+                        {
+                            listView1.Items[i].SubItems[3].Text = getstock;
+                        }else
+                        {
+                            listView1.Items[i].SubItems[3].Text = "Out of Stock ";
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.ToString());
-                    stock = "not found";
                 }
                 progressBar1.Value += 5;
             }
@@ -178,6 +192,31 @@ namespace Stocker
             }
         }
 
+        private void openURLInBrowserToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+           var url = listView1.SelectedItems[0].SubItems[2].Text ;
+            System.Diagnostics.Process.Start(url);
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            if (Properties.Settings.Default.ServerList == null)
+            {
+                Properties.Settings.Default.ServerList = new StringCollection();
+            }
+
+            this.listView1.Items.AddRange((from i in Properties.Settings.Default.ServerList.Cast<string>()
+                                           select new ListViewItem(i.Split('|'))).ToArray());
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Properties.Settings.Default.ServerList = new StringCollection();
+            Properties.Settings.Default.ServerList.AddRange((from i in this.listView1.Items.Cast<ListViewItem>()
+                                                             select string.Join("|", from si in i.SubItems.Cast<ListViewItem.ListViewSubItem>()
+                                                                                     select si.Text)).ToArray());
+            Properties.Settings.Default.Save();
+        }
 
         //end  
     }

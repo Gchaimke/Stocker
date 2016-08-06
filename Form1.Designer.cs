@@ -48,6 +48,7 @@
             this.label5 = new System.Windows.Forms.Label();
             this.tBProductUrl = new System.Windows.Forms.TextBox();
             this.lblStatus = new System.Windows.Forms.Label();
+            this.openURLInBrowserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -73,6 +74,7 @@
             this.columnHeaderColors});
             this.listView1.ContextMenuStrip = this.contextMenuStrip1;
             this.listView1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.listView1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.listView1.FullRowSelect = true;
             this.listView1.GridLines = true;
             this.listView1.Location = new System.Drawing.Point(0, 180);
@@ -100,15 +102,16 @@
             // 
             // columnHeaderColors
             // 
-            this.columnHeaderColors.Text = "Colors";
+            this.columnHeaderColors.Text = "Colors/Sizes in Stock";
             this.columnHeaderColors.Width = 1200;
             // 
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.deleteSelsectedItemsToolStripMenuItem});
+            this.deleteSelsectedItemsToolStripMenuItem,
+            this.openURLInBrowserToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(199, 26);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(199, 48);
             // 
             // deleteSelsectedItemsToolStripMenuItem
             // 
@@ -228,6 +231,13 @@
             this.lblStatus.TabIndex = 47;
             this.lblStatus.Text = "Status";
             // 
+            // openURLInBrowserToolStripMenuItem
+            // 
+            this.openURLInBrowserToolStripMenuItem.Name = "openURLInBrowserToolStripMenuItem";
+            this.openURLInBrowserToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.openURLInBrowserToolStripMenuItem.Text = "Open URL in browser";
+            this.openURLInBrowserToolStripMenuItem.Click += new System.EventHandler(this.openURLInBrowserToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -250,6 +260,8 @@
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Stocker -check if you have stock";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -276,6 +288,7 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.ColumnHeader columnHeaderColors;
+        private System.Windows.Forms.ToolStripMenuItem openURLInBrowserToolStripMenuItem;
     }
 }
 
