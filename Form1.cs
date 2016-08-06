@@ -79,6 +79,7 @@ namespace Stocker
 
                 OptionClick1(colorElm, colors.Get(i), wb, p);
             }
+            sizes.Clear();
             
         }
         private bool OptionClick1(HtmlElement options, string option, WebBrowser wb,int p)
@@ -136,6 +137,7 @@ namespace Stocker
                         Console.WriteLine(allSizes.Get(s) + "=" + allSizes.GetKey(s));
 
                     chekStock(htmlcol[0], htmlcol[1], allColors, allSizes, wb, i);
+                    
                 }
                 catch (Exception ex)
                 {
@@ -144,6 +146,7 @@ namespace Stocker
                 }
                 progressBar1.Value += 5;
             }
+            
             wb.Dispose();
             //return;
         }
