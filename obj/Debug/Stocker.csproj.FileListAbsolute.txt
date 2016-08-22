@@ -21,3 +21,13 @@ C:\Users\gchai_000\Source\Repos\Stocker\Stocker\obj\Debug\Stocker.Form1.resource
 C:\Users\gchai_000\Source\Repos\Stocker\Stocker\obj\Debug\Stocker.Properties.Resources.resources
 C:\Users\gchai_000\Source\Repos\Stocker\Stocker\obj\Debug\Stocker.settings.resources
 C:\Users\gchai_000\Source\Repos\Stocker\Stocker\obj\Debug\Stocker.csproj.GenerateResource.Cache
+C:\Users\gchaim\Source\Repos\Stocker\bin\Debug\Stocker.exe.config
+C:\Users\gchaim\Source\Repos\Stocker\obj\Debug\Stocker.exe
+C:\Users\gchaim\Source\Repos\Stocker\obj\Debug\Stocker.pdb
+C:\Users\gchaim\Source\Repos\Stocker\bin\Debug\Stocker.exe
+C:\Users\gchaim\Source\Repos\Stocker\bin\Debug\Stocker.pdb
+C:\Users\gchaim\Source\Repos\Stocker\obj\Debug\Stocker.csprojResolveAssemblyReference.cache
+C:\Users\gchaim\Source\Repos\Stocker\obj\Debug\Stocker.Form1.resources
+C:\Users\gchaim\Source\Repos\Stocker\obj\Debug\Stocker.Properties.Resources.resources
+C:\Users\gchaim\Source\Repos\Stocker\obj\Debug\Stocker.settings.resources
+C:\Users\gchaim\Source\Repos\Stocker\obj\Debug\Stocker.csproj.GenerateResource.Cache

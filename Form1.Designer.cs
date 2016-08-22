@@ -37,6 +37,7 @@
             this.columnHeaderColors = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.deleteSelsectedItemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openURLInBrowserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.BtnAddProd = new System.Windows.Forms.Button();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.label4 = new System.Windows.Forms.Label();
@@ -48,7 +49,12 @@
             this.label5 = new System.Windows.Forms.Label();
             this.tBProductUrl = new System.Windows.Forms.TextBox();
             this.lblStatus = new System.Windows.Forms.Label();
-            this.openURLInBrowserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tBColorId = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.tBSizeId = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.columnHeaderColorId = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderSizeId = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -71,7 +77,9 @@
             this.columnHeaderProduct,
             this.columnHeaderStockId,
             this.columnHeaderURL,
-            this.columnHeaderColors});
+            this.columnHeaderColors,
+            this.columnHeaderColorId,
+            this.columnHeaderSizeId});
             this.listView1.ContextMenuStrip = this.contextMenuStrip1;
             this.listView1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.listView1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -80,7 +88,7 @@
             this.listView1.Location = new System.Drawing.Point(0, 180);
             this.listView1.MinimumSize = new System.Drawing.Size(893, 300);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(1214, 300);
+            this.listView1.Size = new System.Drawing.Size(1207, 300);
             this.listView1.TabIndex = 0;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -93,7 +101,7 @@
             // columnHeaderStockId
             // 
             this.columnHeaderStockId.Text = "Stock id";
-            this.columnHeaderStockId.Width = 80;
+            this.columnHeaderStockId.Width = 81;
             // 
             // columnHeaderURL
             // 
@@ -103,7 +111,7 @@
             // columnHeaderColors
             // 
             this.columnHeaderColors.Text = "Colors/Sizes in Stock";
-            this.columnHeaderColors.Width = 1200;
+            this.columnHeaderColors.Width = 700;
             // 
             // contextMenuStrip1
             // 
@@ -119,6 +127,13 @@
             this.deleteSelsectedItemsToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
             this.deleteSelsectedItemsToolStripMenuItem.Text = "Delete selsected item(s)";
             this.deleteSelsectedItemsToolStripMenuItem.Click += new System.EventHandler(this.deleteSelsectedItemsToolStripMenuItem_Click);
+            // 
+            // openURLInBrowserToolStripMenuItem
+            // 
+            this.openURLInBrowserToolStripMenuItem.Name = "openURLInBrowserToolStripMenuItem";
+            this.openURLInBrowserToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.openURLInBrowserToolStripMenuItem.Text = "Open URL in browser";
+            this.openURLInBrowserToolStripMenuItem.Click += new System.EventHandler(this.openURLInBrowserToolStripMenuItem_Click);
             // 
             // BtnAddProd
             // 
@@ -231,18 +246,59 @@
             this.lblStatus.TabIndex = 47;
             this.lblStatus.Text = "Status";
             // 
-            // openURLInBrowserToolStripMenuItem
+            // tBColorId
             // 
-            this.openURLInBrowserToolStripMenuItem.Name = "openURLInBrowserToolStripMenuItem";
-            this.openURLInBrowserToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
-            this.openURLInBrowserToolStripMenuItem.Text = "Open URL in browser";
-            this.openURLInBrowserToolStripMenuItem.Click += new System.EventHandler(this.openURLInBrowserToolStripMenuItem_Click);
+            this.tBColorId.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.tBColorId.Location = new System.Drawing.Point(403, 67);
+            this.tBColorId.Name = "tBColorId";
+            this.tBColorId.Size = new System.Drawing.Size(140, 20);
+            this.tBColorId.TabIndex = 49;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label2.Location = new System.Drawing.Point(400, 49);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(49, 13);
+            this.label2.TabIndex = 48;
+            this.label2.Text = "color id";
+            // 
+            // tBSizeId
+            // 
+            this.tBSizeId.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.tBSizeId.Location = new System.Drawing.Point(572, 67);
+            this.tBSizeId.Name = "tBSizeId";
+            this.tBSizeId.Size = new System.Drawing.Size(140, 20);
+            this.tBSizeId.TabIndex = 51;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label6.Location = new System.Drawing.Point(569, 49);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(43, 13);
+            this.label6.TabIndex = 50;
+            this.label6.Text = "size id";
+            // 
+            // columnHeaderColorId
+            // 
+            this.columnHeaderColorId.Text = "Color id";
+            // 
+            // columnHeaderSizeId
+            // 
+            this.columnHeaderSizeId.Text = "Size id";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1214, 480);
+            this.ClientSize = new System.Drawing.Size(1207, 480);
+            this.Controls.Add(this.tBSizeId);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.tBColorId);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.TbProdName);
@@ -289,6 +345,12 @@
         private System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.ColumnHeader columnHeaderColors;
         private System.Windows.Forms.ToolStripMenuItem openURLInBrowserToolStripMenuItem;
+        private System.Windows.Forms.ColumnHeader columnHeaderColorId;
+        private System.Windows.Forms.ColumnHeader columnHeaderSizeId;
+        private System.Windows.Forms.TextBox tBColorId;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox tBSizeId;
+        private System.Windows.Forms.Label label6;
     }
 }
 

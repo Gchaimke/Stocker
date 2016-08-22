@@ -28,6 +28,8 @@ namespace Stocker
             product.SubItems.Add(tBstockId.Text);
             product.SubItems.Add(tBProductUrl.Text);
             product.SubItems.Add("Not Checked");
+            product.SubItems.Add(tBColorId.Text);
+            product.SubItems.Add(tBSizeId.Text);
             listView1.Items.Add(product);
         }
 
@@ -59,6 +61,7 @@ namespace Stocker
             {
                 for (int i = 0; i < colors.Count; i++)
                 {
+                    tmp = "";
                     OptionClick1(htmlcol[0], colors.Get(i), wb, p);
                     strColorSizes += colors.GetKey(i) + ":";
                     for (int s = 1; s < sizes.Count; s++)
@@ -86,6 +89,42 @@ namespace Stocker
             }
             
          }
+
+        private void chekStock(HtmlElementCollection htmlcol, string colorid, string sizeid, WebBrowser wb, int i)
+        {
+
+            htmlcol[0].Focus();
+            htmlcol[0].SetAttribute("value", colorid);
+            htmlcol[0].RaiseEvent("onChange");
+            htmlcol[0].RemoveFocus();
+
+            htmlcol[1].Focus();
+            htmlcol[1].SetAttribute("value", sizeid);
+            htmlcol[1].RaiseEvent("onChange");
+            htmlcol[1].RemoveFocus();
+
+            var product = wb.Document.GetElementById(listView1.Items[i].SubItems[1].Text);
+            string getstock = "";
+            if (product != null)
+            {
+                getstock = product.InnerText;
+                if (!getstock.Contains("Out of Stock"))
+                {
+                    listView1.Items[i].SubItems[3].Text = "Stock exists";
+                }
+                else
+                {
+                    listView1.Items[i].SubItems[3].Text = "Out of Stock";
+                }
+            }
+            else
+            {
+                listView1.Items[i].SubItems[3].Text = "Id not found";
+            }
+            
+            
+        }
+
         private bool OptionClick1(HtmlElement options, string option, WebBrowser wb,int p)
         {
             if (options.Id != null)
@@ -132,27 +171,56 @@ namespace Stocker
                 // do whatever you want with this instance of WB.Document
                 try{
                     HtmlElementCollection htmlcol = wb.Document.GetElementsByTagName("select");
-                    if (htmlcol.Count >0) { 
-                    GetColorsAndSizes(htmlcol);
-                    Console.WriteLine("--------------------------------------");
-                    for (int s = 0; s < allColors.Count; s++)
-                        Console.WriteLine(allColors.Get(s) + "=" + allColors.GetKey(s));
-                    for (int s = 0; s < allSizes.Count; s++)
-                        Console.WriteLine(allSizes.Get(s) + "=" + allSizes.GetKey(s));
+                    if (listView1.Items[i].SubItems[4].Text == "" && listView1.Items[i].SubItems[5].Text == "")
+                    {
+                        if (htmlcol.Count > 0)
+                        {
+                            GetColorsAndSizes(htmlcol);
+                            Console.WriteLine("--------------------------------------");
+                            for (int s = 0; s < allColors.Count; s++)
+                                Console.WriteLine(allColors.Get(s) + "=" + allColors.GetKey(s));
+                            for (int s = 0; s < allSizes.Count; s++)
+                                Console.WriteLine(allSizes.Get(s) + "=" + allSizes.GetKey(s));
 
-                    chekStock(htmlcol, allColors, allSizes, wb, i);
-                    }else{
-                        var product = wb.Document.GetElementById(listView1.Items[i].SubItems[1].Text);
-                        string getstock = "";
-                        getstock = product.InnerText;
-                        if (!getstock.Contains("Out of Stock"))
+                            chekStock(htmlcol, allColors, allSizes, wb, i);
+                        }
+                        else
                         {
-                            listView1.Items[i].SubItems[3].Text = getstock;
-                        }else
+                            var product = wb.Document.GetElementById(listView1.Items[i].SubItems[1].Text);
+                            string getstock = "";
+                            getstock = product.InnerText;
+                            if (!getstock.Contains("Out of Stock"))
+                            {
+                                listView1.Items[i].SubItems[3].Text = getstock;
+                            }
+                            else
+                            {
+                                listView1.Items[i].SubItems[3].Text = "Out of Stock ";
+                            }
+                        }
+                    }else
+                    {
+                        if (htmlcol.Count > 0)
                         {
-                            listView1.Items[i].SubItems[3].Text = "Out of Stock ";
+                            GetColorsAndSizes(htmlcol);
+                            chekStock(htmlcol, listView1.Items[i].SubItems[4].Text, listView1.Items[i].SubItems[5].Text, wb, i);
+                        }
+                        else
+                        {
+                            var product = wb.Document.GetElementById(listView1.Items[i].SubItems[1].Text);
+                            string getstock = "";
+                            getstock = product.InnerText;
+                            if (!getstock.Contains("Out of Stock"))
+                            {
+                                listView1.Items[i].SubItems[3].Text = getstock;
+                            }
+                            else
+                            {
+                                listView1.Items[i].SubItems[3].Text = "Out of Stock ";
+                            }
                         }
                     }
+                    
                 }
                 catch (Exception ex)
                 {
