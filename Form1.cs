@@ -94,6 +94,11 @@ namespace Stocker
         //checkstock(collection of html objects "select",color id, size id, opened web browser, current number of product in list view
         private void chekStock(HtmlElementCollection htmlcol, string colorid, string sizeid, WebBrowser wb, int i)
         {
+            var values = allColors.Cast<string>().Select(e => allColors[e]); // b, 2
+            if (values.Contains(colorid))
+            {
+                Console.WriteLine("------ok--------------");
+            }
 
             htmlcol[0].Focus();
             htmlcol[0].SetAttribute("value", colorid);
@@ -110,14 +115,7 @@ namespace Stocker
             if (product != null)
             {
                 getstock = product.InnerText;
-                if (!getstock.Contains("Out of Stock"))
-                {
-                    listView1.Items[i].SubItems[3].Text = "Stock exists";
-                }
-                else
-                {
-                    listView1.Items[i].SubItems[3].Text = "Out of Stock";
-                }
+                listView1.Items[i].SubItems[3].Text = !getstock.Contains("Out of Stock") ? "Stock exists?" : "Out of Stock ";
             }
             else
             {
@@ -191,14 +189,7 @@ namespace Stocker
                             var product = wb.Document.GetElementById(listView1.Items[i].SubItems[1].Text);
                             string getstock = "";
                             getstock = product.InnerText;
-                            if (!getstock.Contains("Out of Stock"))
-                            {
-                                listView1.Items[i].SubItems[3].Text = getstock;
-                            }
-                            else
-                            {
-                                listView1.Items[i].SubItems[3].Text = "Out of Stock ";
-                            }
+                            listView1.Items[i].SubItems[3].Text = !getstock.Contains("Out of Stock") ? "Stock exists" : "Out of Stock ";
                         }
                     }else
                     {
@@ -212,14 +203,7 @@ namespace Stocker
                             var product = wb.Document.GetElementById(listView1.Items[i].SubItems[1].Text);
                             string getstock = "";
                             getstock = product.InnerText;
-                            if (!getstock.Contains("Out of Stock"))
-                            {
-                                listView1.Items[i].SubItems[3].Text = getstock;
-                            }
-                            else
-                            {
-                                listView1.Items[i].SubItems[3].Text = "Out of Stock ";
-                            }
+                            listView1.Items[i].SubItems[3].Text = !getstock.Contains("Out of Stock") ? "Stock exists" : "Out of Stock ";
                         }
                     }
                     
