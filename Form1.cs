@@ -19,9 +19,10 @@ namespace Stocker
         {
             InitializeComponent();
         }
-        // Create a WebBrowser instance.
+       //declaration of variables
         NameValueCollection allColors = new NameValueCollection();
         NameValueCollection allSizes = new NameValueCollection();
+        //Method to add products to list view
         private void AddProduct()
         {
             ListViewItem product = new ListViewItem(TbProdName.Text );
@@ -32,7 +33,7 @@ namespace Stocker
             product.SubItems.Add(tBSizeId.Text);
             listView1.Items.Add(product);
         }
-
+        //go throw hmtl collection of "select" and get all colors and sizes
         private void GetColorsAndSizes(HtmlElementCollection htmlcol)
         {
             allColors.Clear();
@@ -89,7 +90,8 @@ namespace Stocker
             }
             
          }
-
+        //overide method if you have to check just one product in page
+        //checkstock(collection of html objects "select",color id, size id, opened web browser, current number of product in list view
         private void chekStock(HtmlElementCollection htmlcol, string colorid, string sizeid, WebBrowser wb, int i)
         {
 
@@ -233,6 +235,75 @@ namespace Stocker
             //return;
         }
 
+        async Task DoNavigationAsync1()
+        {
+            Site_6pm get6pm = new Site_6pm();
+            WebBrowser wb = new WebBrowser();
+            wb.ScriptErrorsSuppressed = true;
+            Void v;
+            TaskCompletionSource<Void> tcs = null;
+            WebBrowserDocumentCompletedEventHandler documentComplete = null;
+            documentComplete = new WebBrowserDocumentCompletedEventHandler((s, e) =>
+            {
+                wb.DocumentCompleted -= documentComplete;
+                tcs.SetResult(v); // continue from where awaited
+            });
+            for (int i = 0; i <= listView1.Items.Count - 1; i++)
+            {
+                Console.WriteLine("Get data for product number "+(i+1));
+                tcs = new TaskCompletionSource<Void>();
+                wb.DocumentCompleted += documentComplete;
+                wb.Navigate(listView1.Items[i].SubItems[2].Text);
+                await Task.Delay(500);
+                await tcs.Task;
+                wb.SetBounds(10, 10, 900, 900);
+                // do whatever you want with this instance of WB.Document
+                try
+                {
+                    HtmlElementCollection htmlcol = wb.Document.GetElementsByTagName("select");
+                    if (listView1.Items[i].SubItems[4].Text == "" && listView1.Items[i].SubItems[5].Text == "")
+                    {
+                        if (htmlcol.Count > 0)
+                        {
+                            allColors = get6pm.GetColors(htmlcol);
+                            allSizes = get6pm.GetSizes(htmlcol);
+                            chekStock(htmlcol, allColors, allSizes, wb, i);
+                        }
+                        else
+                        {
+                            var product = wb.Document.GetElementById(listView1.Items[i].SubItems[1].Text);
+                            string getstock = "";
+                            getstock = product.InnerText;
+                            listView1.Items[i].SubItems[3].Text = !getstock.Contains("Out of Stock") ? "Stock exists" : "Out of Stock ";
+                          
+                        }
+                    }
+                    else
+                    {
+                        if (htmlcol.Count > 0)
+                        {
+                            GetColorsAndSizes(htmlcol);
+                            chekStock(htmlcol, listView1.Items[i].SubItems[4].Text, listView1.Items[i].SubItems[5].Text, wb, i);
+                        }
+                        else
+                        {
+                            var product = wb.Document.GetElementById(listView1.Items[i].SubItems[1].Text);
+                            string getstock = "";
+                            getstock = product.InnerText;
+                            listView1.Items[i].SubItems[3].Text = !getstock.Contains("Out of Stock") ? "Stock exists" : "Out of Stock ";
+                           
+                        }
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
+                }
+                progressBar1.Value += 5;
+            }
+            }
+
         private void BtnAddProd_Click(object sender, EventArgs e)
         {
             AddProduct();
@@ -284,6 +355,17 @@ namespace Stocker
                                                              select string.Join("|", from si in i.SubItems.Cast<ListViewItem.ListViewSubItem>()
                                                                                      select si.Text)).ToArray());
             Properties.Settings.Default.Save();
+        }
+
+        private void btnAddP_Click(object sender, EventArgs e)
+        {
+            progressBar1.Value = 10;
+            var task = DoNavigationAsync1();
+            task.ContinueWith((t) =>
+            {
+                //MessageBox.Show("Navigation done!");
+                progressBar1.Value = 100;
+            }, TaskScheduler.FromCurrentSynchronizationContext());
         }
 
         //end  

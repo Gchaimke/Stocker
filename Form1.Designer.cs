@@ -35,6 +35,8 @@
             this.columnHeaderStockId = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderURL = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderColors = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderColorId = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderSizeId = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.deleteSelsectedItemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openURLInBrowserToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -53,8 +55,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.tBSizeId = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.columnHeaderColorId = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeaderSizeId = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.btnGet2 = new System.Windows.Forms.Button();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -112,6 +113,14 @@
             // 
             this.columnHeaderColors.Text = "Colors/Sizes in Stock";
             this.columnHeaderColors.Width = 700;
+            // 
+            // columnHeaderColorId
+            // 
+            this.columnHeaderColorId.Text = "Color id";
+            // 
+            // columnHeaderSizeId
+            // 
+            this.columnHeaderSizeId.Text = "Size id";
             // 
             // contextMenuStrip1
             // 
@@ -282,19 +291,23 @@
             this.label6.TabIndex = 50;
             this.label6.Text = "size id";
             // 
-            // columnHeaderColorId
+            // btnGet2
             // 
-            this.columnHeaderColorId.Text = "Color id";
-            // 
-            // columnHeaderSizeId
-            // 
-            this.columnHeaderSizeId.Text = "Size id";
+            this.btnGet2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.btnGet2.Location = new System.Drawing.Point(107, 101);
+            this.btnGet2.Name = "btnGet2";
+            this.btnGet2.Size = new System.Drawing.Size(110, 43);
+            this.btnGet2.TabIndex = 52;
+            this.btnGet2.Text = "Get 2";
+            this.btnGet2.UseVisualStyleBackColor = true;
+            this.btnGet2.Click += new System.EventHandler(this.btnAddP_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1207, 480);
+            this.Controls.Add(this.btnGet2);
             this.Controls.Add(this.tBSizeId);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.tBColorId);
@@ -351,6 +364,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox tBSizeId;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Button btnGet2;
     }
 }
 
