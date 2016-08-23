@@ -94,36 +94,51 @@ namespace Stocker
         //checkstock(collection of html objects "select",color id, size id, opened web browser, current number of product in list view
         private void chekStock(HtmlElementCollection htmlcol, string colorid, string sizeid, WebBrowser wb, int i)
         {
-            var values = allColors.Cast<string>().Select(e => allColors[e]); // b, 2
-            if (values.Contains(colorid))
+            bool color_exist=true;
+            bool size_exist=true ;
+            string colors = string.Join("|", allColors .AllKeys.Select(key => allColors[key]));
+            string sizes = string.Join("|", allSizes.AllKeys.Select(key => allSizes[key]));
+            colors = "|"+ colors + "|";
+            sizes = "|" + sizes + "|";
+            if (colors.Contains("|"+colorid+"|"))
             {
-                Console.WriteLine("------ok--------------");
+                htmlcol[0].Focus();
+                htmlcol[0].SetAttribute("value", colorid);
+                htmlcol[0].RaiseEvent("onChange");
+                htmlcol[0].RemoveFocus();
+            }else
+            {
+                listView1.Items[i].SubItems[3].Text="Color id not found ";
+                color_exist = false;
             }
 
-            htmlcol[0].Focus();
-            htmlcol[0].SetAttribute("value", colorid);
-            htmlcol[0].RaiseEvent("onChange");
-            htmlcol[0].RemoveFocus();
-
-            htmlcol[1].Focus();
-            htmlcol[1].SetAttribute("value", sizeid);
-            htmlcol[1].RaiseEvent("onChange");
-            htmlcol[1].RemoveFocus();
+            if (sizes.Contains("|" + sizeid + "|"))
+            {
+                htmlcol[1].Focus();
+                htmlcol[1].SetAttribute("value", sizeid);
+                htmlcol[1].RaiseEvent("onChange");
+                htmlcol[1].RemoveFocus();
+            }
+            else
+            {
+                listView1.Items[i].SubItems[3].Text += " Size id not found ";
+                size_exist = false;
+            }
 
             var product = wb.Document.GetElementById(listView1.Items[i].SubItems[1].Text);
             string getstock = "";
             if (product != null)
             {
                 getstock = product.InnerText;
-                listView1.Items[i].SubItems[3].Text = !getstock.Contains("Out of Stock") ? "Stock exists?" : "Out of Stock ";
+                if(color_exist ==true && size_exist == true) { 
+                listView1.Items[i].SubItems[3].Text = !getstock.Contains("Out of Stock") ? "Stock exists" : "Out of Stock ";
+                }
             }
             else
             {
                 listView1.Items[i].SubItems[3].Text = "Id not found";
             }
-            
-            
-        }
+       }
 
         private bool OptionClick1(HtmlElement options, string option, WebBrowser wb,int p)
         {
