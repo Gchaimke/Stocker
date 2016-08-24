@@ -19,11 +19,13 @@ namespace Stocker
         {
             InitializeComponent();
         }
-       //declaration of variables
+
+        
         NameValueCollection allColors = new NameValueCollection();
         NameValueCollection allSizes = new NameValueCollection();
+        Site_6pm get6pm = new Site_6pm();
         //Method to add products to list view
-        private void AddProduct()
+        public void AddProduct()
         {
             ListViewItem product = new ListViewItem(TbProdName.Text );
             product.SubItems.Add(tBstockId.Text);
@@ -33,32 +35,22 @@ namespace Stocker
             product.SubItems.Add(tBSizeId.Text);
             listView1.Items.Add(product);
         }
-        //go throw hmtl collection of "select" and get all colors and sizes
-        private void GetColorsAndSizes(HtmlElementCollection htmlcol)
+       
+       private void SetListview1(int item,int subitem,string txtDATA)
         {
-            allColors.Clear();
-            allSizes.Clear();
-            //get a collection of the parent "select" elements first
-            if (htmlcol[0].Name == "colorId")
-            { //if the select element is the dropdown we need to select something for
-              //create another element collection for the child elements of the "select" element
-                HtmlElementCollection htmlcolchild = htmlcol[0].Children;
-                for (int j = 0; j < htmlcolchild.Count; j++) allColors.Add(htmlcolchild[j].InnerText, htmlcolchild[j].GetAttribute("value"));
-            }else if(htmlcol[0].Name == "dimensionValues")
-            {
-                HtmlElementCollection htmlcolchild = htmlcol[0].Children;
-                for (int j = 0; j < htmlcolchild.Count; j++) allSizes.Add(htmlcolchild[j].InnerText, htmlcolchild[j].GetAttribute("value"));
-            }
-            if (htmlcol.Count==2 && htmlcol[1].Name == "dimensionValues"){
-                HtmlElementCollection htmlcolchild = htmlcol[1].Children;
-                for (int j = 0; j < htmlcolchild.Count; j++) allSizes.Add(htmlcolchild[j].InnerText, htmlcolchild[j].GetAttribute("value"));
-            }
+            listView1.Items[item].SubItems[subitem].Text = txtDATA;
         }
 
-        private void chekStock(HtmlElementCollection htmlcol, NameValueCollection colors, NameValueCollection sizes, WebBrowser wb, int p) {
-          string strColorSizes = "";
-          string tmp = "";
-            if (colors.Count>0)
+         private void BtnAddProd_Click(object sender, EventArgs e)
+        {
+            AddProduct();
+        }
+
+        public void chekStock(HtmlElementCollection htmlcol, NameValueCollection colors, NameValueCollection sizes, WebBrowser wb, int p)
+        {
+            string strColorSizes = "";
+            string tmp = "";
+            if (colors.Count > 0)
             {
                 for (int i = 0; i < colors.Count; i++)
                 {
@@ -73,7 +65,7 @@ namespace Stocker
                         }
                     }
                     strColorSizes += tmp + "   ";
-                    listView1.Items[p].SubItems[3].Text = strColorSizes;
+                    SetListview1(p,3, strColorSizes);
                 }
             }
             else
@@ -86,29 +78,30 @@ namespace Stocker
                     }
                 }
                 strColorSizes += tmp + "   ";
-                listView1.Items[p].SubItems[3].Text = strColorSizes;
+                SetListview1(p, 3, strColorSizes);
             }
-            
-         }
+
+        }
         //overide method if you have to check just one product in page
         //checkstock(collection of html objects "select",color id, size id, opened web browser, current number of product in list view
-        private void chekStock(HtmlElementCollection htmlcol, string colorid, string sizeid, WebBrowser wb, int i)
+        public void chekStock(HtmlElementCollection htmlcol, string colorid, string sizeid, WebBrowser wb, int i)
         {
-            bool color_exist=true;
-            bool size_exist=true ;
-            string colors = string.Join("|", allColors .AllKeys.Select(key => allColors[key]));
+            bool color_exist = true;
+            bool size_exist = true;
+            string colors = string.Join("|", allColors.AllKeys.Select(key => allColors[key]));
             string sizes = string.Join("|", allSizes.AllKeys.Select(key => allSizes[key]));
-            colors = "|"+ colors + "|";
+            colors = "|" + colors + "|";
             sizes = "|" + sizes + "|";
-            if (colors.Contains("|"+colorid+"|"))
+            if (colors.Contains("|" + colorid + "|"))
             {
                 htmlcol[0].Focus();
                 htmlcol[0].SetAttribute("value", colorid);
                 htmlcol[0].RaiseEvent("onChange");
                 htmlcol[0].RemoveFocus();
-            }else
+            }
+            else
             {
-                listView1.Items[i].SubItems[3].Text="Color id not found ";
+                SetListview1(i, 3, "Color id not found ");
                 color_exist = false;
             }
 
@@ -121,7 +114,8 @@ namespace Stocker
             }
             else
             {
-                listView1.Items[i].SubItems[3].Text += " Size id not found ";
+                string txtDATA = color_exist == false ? "Color id and Size id not found " : "Size id not found ";
+                SetListview1(i, 3, txtDATA);
                 size_exist = false;
             }
 
@@ -130,17 +124,20 @@ namespace Stocker
             if (product != null)
             {
                 getstock = product.InnerText;
-                if(color_exist ==true && size_exist == true) { 
-                listView1.Items[i].SubItems[3].Text = !getstock.Contains("Out of Stock") ? "Stock exists" : "Out of Stock ";
+                if (color_exist == true && size_exist == true)
+                {
+                    string txtDATA = !getstock.Contains("Out of Stock") ? "Stock exists" : "Out of Stock ";
+                    SetListview1(i, 3, txtDATA);
                 }
             }
             else
             {
-                listView1.Items[i].SubItems[3].Text = "Id not found";
+                SetListview1(i, 3, "Id not found");
             }
-       }
+        }
 
-        private bool OptionClick1(HtmlElement options, string option, WebBrowser wb,int p)
+
+        private bool OptionClick1(HtmlElement options, string option, WebBrowser wb, int p)
         {
             if (options.Id != null)
             {
@@ -159,84 +156,12 @@ namespace Stocker
             return false;
         }
 
+
         struct Void { }; // use an empty struct as parameter to generic TaskCompletionSource
 
-        async Task DoNavigationAsync()
+        public async Task DoNavigationAsync()
         {
-            WebBrowser wb = new WebBrowser();
-            wb.ScriptErrorsSuppressed = true;
-            Void v;
-            TaskCompletionSource<Void> tcs = null;
-            WebBrowserDocumentCompletedEventHandler documentComplete = null;
 
-            documentComplete = new WebBrowserDocumentCompletedEventHandler((s, e) =>
-            {
-                wb.DocumentCompleted -= documentComplete;
-                tcs.SetResult(v); // continue from where awaited
-            });
-
-            for (int i = 0; i <= listView1.Items.Count - 1; i++)
-            {
-                tcs = new TaskCompletionSource<Void>();
-                wb.DocumentCompleted += documentComplete;
-                wb.Navigate(listView1.Items[i].SubItems[2].Text);
-                await Task.Delay(500);
-                await tcs.Task;
-                wb.SetBounds(10,10,900,900);
-                // do whatever you want with this instance of WB.Document
-                try{
-                    HtmlElementCollection htmlcol = wb.Document.GetElementsByTagName("select");
-                    if (listView1.Items[i].SubItems[4].Text == "" && listView1.Items[i].SubItems[5].Text == "")
-                    {
-                        if (htmlcol.Count > 0)
-                        {
-                            GetColorsAndSizes(htmlcol);
-                            Console.WriteLine("--------------------------------------");
-                            for (int s = 0; s < allColors.Count; s++)
-                                Console.WriteLine(allColors.Get(s) + "=" + allColors.GetKey(s));
-                            for (int s = 0; s < allSizes.Count; s++)
-                                Console.WriteLine(allSizes.Get(s) + "=" + allSizes.GetKey(s));
-
-                            chekStock(htmlcol, allColors, allSizes, wb, i);
-                        }
-                        else
-                        {
-                            var product = wb.Document.GetElementById(listView1.Items[i].SubItems[1].Text);
-                            string getstock = "";
-                            getstock = product.InnerText;
-                            listView1.Items[i].SubItems[3].Text = !getstock.Contains("Out of Stock") ? "Stock exists" : "Out of Stock ";
-                        }
-                    }else
-                    {
-                        if (htmlcol.Count > 0)
-                        {
-                            GetColorsAndSizes(htmlcol);
-                            chekStock(htmlcol, listView1.Items[i].SubItems[4].Text, listView1.Items[i].SubItems[5].Text, wb, i);
-                        }
-                        else
-                        {
-                            var product = wb.Document.GetElementById(listView1.Items[i].SubItems[1].Text);
-                            string getstock = "";
-                            getstock = product.InnerText;
-                            listView1.Items[i].SubItems[3].Text = !getstock.Contains("Out of Stock") ? "Stock exists" : "Out of Stock ";
-                        }
-                    }
-                    
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.ToString());
-                }
-                progressBar1.Value += 5;
-            }
-            
-            wb.Dispose();
-            //return;
-        }
-
-        async Task DoNavigationAsync1()
-        {
-            Site_6pm get6pm = new Site_6pm();
             WebBrowser wb = new WebBrowser();
             wb.ScriptErrorsSuppressed = true;
             Void v;
@@ -249,7 +174,7 @@ namespace Stocker
             });
             for (int i = 0; i <= listView1.Items.Count - 1; i++)
             {
-                Console.WriteLine("Get data for product number "+(i+1));
+                Console.WriteLine("Get data for product number " + (i + 1));
                 tcs = new TaskCompletionSource<Void>();
                 wb.DocumentCompleted += documentComplete;
                 wb.Navigate(listView1.Items[i].SubItems[2].Text);
@@ -260,6 +185,11 @@ namespace Stocker
                 try
                 {
                     HtmlElementCollection htmlcol = wb.Document.GetElementsByTagName("select");
+                    var product = wb.Document.GetElementById(listView1.Items[i].SubItems[1].Text);
+                    string getstock = "";
+                    
+                    //var helmProduct = wb.Document.GetElementsByTagName("button")["add-to-cart-button"].InnerText;  get element by name
+
                     if (listView1.Items[i].SubItems[4].Text == "" && listView1.Items[i].SubItems[5].Text == "")
                     {
                         if (htmlcol.Count > 0)
@@ -270,27 +200,24 @@ namespace Stocker
                         }
                         else
                         {
-                            var product = wb.Document.GetElementById(listView1.Items[i].SubItems[1].Text);
-                            string getstock = "";
                             getstock = product.InnerText;
-                            listView1.Items[i].SubItems[3].Text = !getstock.Contains("Out of Stock") ? "Stock exists" : "Out of Stock ";
-                          
+                            string txtDATA = !getstock.Contains("Out of Stock") ? "Stock exists" : "Out of Stock ";
+                            SetListview1(i, 3, txtDATA);
                         }
                     }
                     else
                     {
                         if (htmlcol.Count > 0)
                         {
-                            GetColorsAndSizes(htmlcol);
+                            allColors = get6pm.GetColors(htmlcol);
+                            allSizes = get6pm.GetSizes(htmlcol);
                             chekStock(htmlcol, listView1.Items[i].SubItems[4].Text, listView1.Items[i].SubItems[5].Text, wb, i);
                         }
                         else
                         {
-                            var product = wb.Document.GetElementById(listView1.Items[i].SubItems[1].Text);
-                            string getstock = "";
                             getstock = product.InnerText;
-                            listView1.Items[i].SubItems[3].Text = !getstock.Contains("Out of Stock") ? "Stock exists" : "Out of Stock ";
-                           
+                            string txtDATA = !getstock.Contains("Out of Stock") ? "Stock exists" : "Out of Stock ";
+                            SetListview1(i, 3, txtDATA);
                         }
                     }
 
@@ -301,17 +228,13 @@ namespace Stocker
                 }
                 progressBar1.Value += 5;
             }
-            }
-
-        private void BtnAddProd_Click(object sender, EventArgs e)
-        {
-            AddProduct();
         }
+
 
         private void BtnGetStock_Click(object sender, EventArgs e)
         {
             progressBar1.Value = 10;
-            var task = DoNavigationAsync();
+            var task =DoNavigationAsync();
             task.ContinueWith((t) =>
             {
                 //MessageBox.Show("Navigation done!");
@@ -356,17 +279,6 @@ namespace Stocker
             Properties.Settings.Default.Save();
         }
 
-        private void btnAddP_Click(object sender, EventArgs e)
-        {
-            progressBar1.Value = 10;
-            var task = DoNavigationAsync1();
-            task.ContinueWith((t) =>
-            {
-                //MessageBox.Show("Navigation done!");
-                progressBar1.Value = 100;
-            }, TaskScheduler.FromCurrentSynchronizationContext());
-        }
-
-        //end  
+       
     }
 }

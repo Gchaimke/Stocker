@@ -293,14 +293,10 @@
             // 
             // btnGet2
             // 
-            this.btnGet2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.btnGet2.Location = new System.Drawing.Point(107, 101);
+            this.btnGet2.Location = new System.Drawing.Point(0, 0);
             this.btnGet2.Name = "btnGet2";
-            this.btnGet2.Size = new System.Drawing.Size(110, 43);
-            this.btnGet2.TabIndex = 52;
-            this.btnGet2.Text = "Get 2";
-            this.btnGet2.UseVisualStyleBackColor = true;
-            this.btnGet2.Click += new System.EventHandler(this.btnAddP_Click);
+            this.btnGet2.Size = new System.Drawing.Size(75, 23);
+            this.btnGet2.TabIndex = 1;
             // 
             // Form1
             // 
@@ -339,10 +335,8 @@
 
         #endregion
         private System.Windows.Forms.Button BtnGetStock;
-        private System.Windows.Forms.ListView listView1;
         private System.Windows.Forms.ColumnHeader columnHeaderProduct;
         private System.Windows.Forms.Button BtnAddProd;
-        private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox cBTemplateSettings;
         private System.Windows.Forms.TextBox tBstockId;
@@ -365,6 +359,8 @@
         private System.Windows.Forms.TextBox tBSizeId;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button btnGet2;
+        public System.Windows.Forms.ListView listView1;
+        public System.Windows.Forms.ProgressBar progressBar1;
     }
 }
 

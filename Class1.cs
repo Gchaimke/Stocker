@@ -10,8 +10,11 @@ namespace Stocker
 {
     class Site_6pm
     {
-       //go throw hmtl collection of "select" and get all colors
-       public Site_6pm()
+        
+       
+       
+        //go throw hmtl collection of "select" and get all colors
+        public Site_6pm()
         {
             Console.WriteLine("--------------------------------------");
             Console.WriteLine("Get data from site 6pm.com");
@@ -52,6 +55,8 @@ namespace Stocker
             return allSizes;
         }
 
+       
+       
 
     }
 }
