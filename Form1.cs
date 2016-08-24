@@ -20,14 +20,45 @@ namespace Stocker
             InitializeComponent();
         }
 
-        
+
         NameValueCollection allColors = new NameValueCollection();
         NameValueCollection allSizes = new NameValueCollection();
+        WebBrowser wb = new WebBrowser();
         Site_6pm get6pm = new Site_6pm();
         //Method to add products to list view
+
+        class Product{
+            public string btnId;
+            public string colorId;
+            public string sizeId;
+            public static int  prodNum =0;
+            public Product()
+            {
+                Console.WriteLine("Get data for product " + (prodNum)); //write to console product number
+                prodNum++;
+            }
+            public bool getProductStock(HtmlElementCollection htmlcol, string colorId,string sizeId, string btnId)
+            {
+                
+                htmlcol[0].Focus();
+                htmlcol[0].SetAttribute("value", colorId);
+                htmlcol[0].RaiseEvent("onChange");
+                htmlcol[0].RemoveFocus();
+
+                htmlcol[1].Focus();
+                htmlcol[1].SetAttribute("value", sizeId);
+                htmlcol[1].RaiseEvent("onChange");
+                htmlcol[1].RemoveFocus();
+                return false;
+            }
+            ~Product()
+            {
+                prodNum = 0;
+            }
+        }
         public void AddProduct()
         {
-            ListViewItem product = new ListViewItem(TbProdName.Text );
+            ListViewItem product = new ListViewItem(TbProdName.Text);
             product.SubItems.Add(tBstockId.Text);
             product.SubItems.Add(tBProductUrl.Text);
             product.SubItems.Add("Not Checked");
@@ -35,18 +66,13 @@ namespace Stocker
             product.SubItems.Add(tBSizeId.Text);
             listView1.Items.Add(product);
         }
-       
-       private void SetListview1(int item,int subitem,string txtDATA)
+
+        private void SetListview1(int item, int subitem, string txtDATA)
         {
             listView1.Items[item].SubItems[subitem].Text = txtDATA;
         }
 
-         private void BtnAddProd_Click(object sender, EventArgs e)
-        {
-            AddProduct();
-        }
-
-        public void chekStock(HtmlElementCollection htmlcol, NameValueCollection colors, NameValueCollection sizes, WebBrowser wb, int p)
+        public void chekStock(HtmlElementCollection htmlcol, NameValueCollection colors, NameValueCollection sizes, int p)
         {
             string strColorSizes = "";
             string tmp = "";
@@ -65,7 +91,7 @@ namespace Stocker
                         }
                     }
                     strColorSizes += tmp + "   ";
-                    SetListview1(p,3, strColorSizes);
+                    SetListview1(p, 3, strColorSizes);
                 }
             }
             else
@@ -84,60 +110,21 @@ namespace Stocker
         }
         //overide method if you have to check just one product in page
         //checkstock(collection of html objects "select",color id, size id, opened web browser, current number of product in list view
-        public void chekStock(HtmlElementCollection htmlcol, string colorid, string sizeid, WebBrowser wb, int i)
+        public void chekStock(HtmlElementCollection htmlcol, string colorid, string sizeid, int i)
         {
-            bool color_exist = true;
-            bool size_exist = true;
-            string colors = string.Join("|", allColors.AllKeys.Select(key => allColors[key]));
-            string sizes = string.Join("|", allSizes.AllKeys.Select(key => allSizes[key]));
-            colors = "|" + colors + "|";
-            sizes = "|" + sizes + "|";
-            if (colors.Contains("|" + colorid + "|"))
-            {
-                htmlcol[0].Focus();
-                htmlcol[0].SetAttribute("value", colorid);
-                htmlcol[0].RaiseEvent("onChange");
-                htmlcol[0].RemoveFocus();
-            }
-            else
-            {
-                SetListview1(i, 3, "Color id not found ");
-                color_exist = false;
-            }
+            htmlcol[0].Focus();
+            htmlcol[0].SetAttribute("value", colorid);
+            htmlcol[0].RaiseEvent("onChange");
+            htmlcol[0].RemoveFocus();
 
-            if (sizes.Contains("|" + sizeid + "|"))
-            {
-                htmlcol[1].Focus();
-                htmlcol[1].SetAttribute("value", sizeid);
-                htmlcol[1].RaiseEvent("onChange");
-                htmlcol[1].RemoveFocus();
-            }
-            else
-            {
-                string txtDATA = color_exist == false ? "Color id and Size id not found " : "Size id not found ";
-                SetListview1(i, 3, txtDATA);
-                size_exist = false;
-            }
-
-            var product = wb.Document.GetElementById(listView1.Items[i].SubItems[1].Text);
-            string getstock = "";
-            if (product != null)
-            {
-                getstock = product.InnerText;
-                if (color_exist == true && size_exist == true)
-                {
-                    string txtDATA = !getstock.Contains("Out of Stock") ? "Stock exists" : "Out of Stock ";
-                    SetListview1(i, 3, txtDATA);
-                }
-            }
-            else
-            {
-                SetListview1(i, 3, "Id not found");
-            }
+            htmlcol[1].Focus();
+            htmlcol[1].SetAttribute("value", sizeid);
+            htmlcol[1].RaiseEvent("onChange");
+            htmlcol[1].RemoveFocus();
         }
 
 
-        private bool OptionClick1(HtmlElement options, string option, WebBrowser wb, int p)
+        private bool OptionClick1(HtmlElement options, string option, WebBrowser wb, int p) //click on object select by option
         {
             if (options.Id != null)
             {
@@ -161,44 +148,45 @@ namespace Stocker
 
         public async Task DoNavigationAsync()
         {
-
-            WebBrowser wb = new WebBrowser();
-            wb.ScriptErrorsSuppressed = true;
-            Void v;
-            TaskCompletionSource<Void> tcs = null;
-            WebBrowserDocumentCompletedEventHandler documentComplete = null;
-            documentComplete = new WebBrowserDocumentCompletedEventHandler((s, e) =>
+            wb.ScriptErrorsSuppressed = true;                                           //
+            Void v;                                                                     //
+            TaskCompletionSource<Void> tcs = null;                                      //>>>> do asynchronic loading of all pages in one browser
+            WebBrowserDocumentCompletedEventHandler documentComplete = null;            //
+            documentComplete = new WebBrowserDocumentCompletedEventHandler((s, e) =>    //
             {
                 wb.DocumentCompleted -= documentComplete;
                 tcs.SetResult(v); // continue from where awaited
             });
-            for (int i = 0; i <= listView1.Items.Count - 1; i++)
+            for (int i = 0; i <= listView1.Items.Count - 1; i++) //start loop throw product lines
             {
-                Console.WriteLine("Get data for product number " + (i + 1));
+                string buttonId = listView1.Items[i].SubItems[1].Text;
+                string site = listView1.Items[i].SubItems[2].Text;
+                string colorId = listView1.Items[i].SubItems[4].Text;
+                string sizeId = listView1.Items[i].SubItems[5].Text;
+                
+
                 tcs = new TaskCompletionSource<Void>();
-                wb.DocumentCompleted += documentComplete;
-                wb.Navigate(listView1.Items[i].SubItems[2].Text);
-                await Task.Delay(500);
+                wb.DocumentCompleted += documentComplete; //wait browser complate the page loading
+                wb.Navigate(site); //go to the product page
+                await Task.Delay(500); //delay for loading page
                 await tcs.Task;
-                wb.SetBounds(10, 10, 900, 900);
+                wb.SetBounds(10, 10, 900, 900); //set browser position and bounds
+
                 // do whatever you want with this instance of WB.Document
+                //Console.WriteLine("Get data for product number " + (i + 1)); //write to console product number
+
                 try
                 {
-                    HtmlElementCollection htmlcol = wb.Document.GetElementsByTagName("select");
+                    HtmlElementCollection htmlcol = wb.Document.GetElementsByTagName("select"); //get collection of all <select> items on the page
+
                     var product = wb.Document.GetElementById(listView1.Items[i].SubItems[1].Text);
                     string getstock = "";
-                    
                     //var helmProduct = wb.Document.GetElementsByTagName("button")["add-to-cart-button"].InnerText;  get element by name
 
-                    if (listView1.Items[i].SubItems[4].Text == "" && listView1.Items[i].SubItems[5].Text == "")
+                    if (colorId != "" && sizeId != "") //if color and size id is set, then
                     {
-                        if (htmlcol.Count > 0)
-                        {
-                            allColors = get6pm.GetColors(htmlcol);
-                            allSizes = get6pm.GetSizes(htmlcol);
-                            chekStock(htmlcol, allColors, allSizes, wb, i);
-                        }
-                        else
+                        chekStock(htmlcol, colorId, sizeId, i);
+                        if (product != null)
                         {
                             getstock = product.InnerText;
                             string txtDATA = !getstock.Contains("Out of Stock") ? "Stock exists" : "Out of Stock ";
@@ -207,11 +195,11 @@ namespace Stocker
                     }
                     else
                     {
-                        if (htmlcol.Count > 0)
+                        if (htmlcol.Count > 0) //if objects of "select" > 0, then
                         {
-                            allColors = get6pm.GetColors(htmlcol);
-                            allSizes = get6pm.GetSizes(htmlcol);
-                            chekStock(htmlcol, listView1.Items[i].SubItems[4].Text, listView1.Items[i].SubItems[5].Text, wb, i);
+                            allColors = get6pm.GetColors(htmlcol); //get all colors
+                            allSizes = get6pm.GetSizes(htmlcol); //get all sizes
+                            chekStock(htmlcol, allColors, allSizes, i); //check if pairs of colors and sizes exists
                         }
                         else
                         {
@@ -220,7 +208,6 @@ namespace Stocker
                             SetListview1(i, 3, txtDATA);
                         }
                     }
-
                 }
                 catch (Exception ex)
                 {
@@ -230,11 +217,15 @@ namespace Stocker
             }
         }
 
+        private void BtnAddProd_Click(object sender, EventArgs e)
+        {
+            AddProduct();
+        }
 
         private void BtnGetStock_Click(object sender, EventArgs e)
         {
             progressBar1.Value = 10;
-            var task =DoNavigationAsync();
+            var task = DoNavigationAsync();
             task.ContinueWith((t) =>
             {
                 //MessageBox.Show("Navigation done!");
@@ -246,7 +237,7 @@ namespace Stocker
         {
             if (listView1.SelectedItems.Count != 0)
             {
-                foreach(ListViewItem lvi in listView1.SelectedItems)
+                foreach (ListViewItem lvi in listView1.SelectedItems)
                 {
                     lvi.Remove();
                 }
@@ -255,7 +246,7 @@ namespace Stocker
 
         private void openURLInBrowserToolStripMenuItem_Click(object sender, EventArgs e)
         {
-           var url = listView1.SelectedItems[0].SubItems[2].Text ;
+            var url = listView1.SelectedItems[0].SubItems[2].Text;
             System.Diagnostics.Process.Start(url);
         }
 
@@ -279,6 +270,6 @@ namespace Stocker
             Properties.Settings.Default.Save();
         }
 
-       
+
     }
 }

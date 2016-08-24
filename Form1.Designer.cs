@@ -55,7 +55,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.tBSizeId = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.btnGet2 = new System.Windows.Forms.Button();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -291,19 +290,11 @@
             this.label6.TabIndex = 50;
             this.label6.Text = "size id";
             // 
-            // btnGet2
-            // 
-            this.btnGet2.Location = new System.Drawing.Point(0, 0);
-            this.btnGet2.Name = "btnGet2";
-            this.btnGet2.Size = new System.Drawing.Size(75, 23);
-            this.btnGet2.TabIndex = 1;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1207, 480);
-            this.Controls.Add(this.btnGet2);
             this.Controls.Add(this.tBSizeId);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.tBColorId);
@@ -358,7 +349,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox tBSizeId;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Button btnGet2;
         public System.Windows.Forms.ListView listView1;
         public System.Windows.Forms.ProgressBar progressBar1;
     }
