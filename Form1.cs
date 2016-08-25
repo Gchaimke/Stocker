@@ -20,7 +20,6 @@ namespace Stocker
             InitializeComponent();
         }
 
-
         NameValueCollection allColors = new NameValueCollection();
         NameValueCollection allSizes = new NameValueCollection();
         WebBrowser wb = new WebBrowser();
@@ -42,46 +41,9 @@ namespace Stocker
         {
             listView1.Items[item].SubItems[subitem].Text = txtDATA;
         }
-
-        public void chekStock(HtmlElementCollection htmlcol, NameValueCollection colors, NameValueCollection sizes, int p)
-        {
-            string strColorSizes = "";
-            string tmp = "";
-            if (colors.Count > 0)
-            {
-                for (int i = 0; i < colors.Count; i++)
-                {
-                    tmp = "";
-                    OptionClick1(htmlcol[0], colors.Get(i), wb, p);
-                    strColorSizes += colors.GetKey(i) + ":";
-                    for (int s = 1; s < sizes.Count; s++)
-                    {
-                        if (OptionClick1(htmlcol[1], sizes.Get(s), wb, p) == true)
-                        {
-                            tmp += sizes.GetKey(s) + "/";
-                        }
-                    }
-                    strColorSizes += tmp + "   ";
-                    SetListview1(p, 2, strColorSizes);
-                }
-            }
-            else
-            {
-                for (int s = 1; s < sizes.Count; s++)
-                {
-                    if (OptionClick1(htmlcol[0], sizes.Get(s), wb, p) == true)
-                    {
-                        tmp += sizes.GetKey(s) + "/";
-                    }
-                }
-                strColorSizes += tmp + "   ";
-                SetListview1(p, 2, strColorSizes);
-            }
-
-        }
-        //overide method if you have to check just one product in page
+        
         //checkstock(collection of html objects "select",color id, size id, opened web browser, current number of product in list view
-        public void chekStock(HtmlElementCollection htmlcol, string colorid, string sizeid, int i)
+        public void ClickOnProduct(HtmlElementCollection htmlcol, string colorid, string sizeid)
         {
             htmlcol[0].Focus();
             htmlcol[0].SetAttribute("value", colorid);
@@ -94,29 +56,7 @@ namespace Stocker
             htmlcol[1].RemoveFocus();
         }
 
-
-        private bool OptionClick1(HtmlElement options, string option, WebBrowser wb, int p) //click on object select by option
-        {
-            if (options.Id != null)
-            {
-                options.Focus();
-                options.SetAttribute("value", option);
-                options.RaiseEvent("onChange");
-                options.RemoveFocus();
-            }
-            var product = wb.Document.GetElementById(listView1.Items[p].SubItems[1].Text);
-            string getstock = "";
-            getstock = product.InnerText;
-            if (!getstock.Contains("Out of Stock"))
-            {
-                return true;
-            }
-            return false;
-        }
-
-
         struct Void { }; // use an empty struct as parameter to generic TaskCompletionSource
-
         public async Task DoNavigationAsync()
         {
             wb.ScriptErrorsSuppressed = true;                                           //
@@ -139,7 +79,7 @@ namespace Stocker
                 tcs = new TaskCompletionSource<Void>();
                 wb.DocumentCompleted += documentComplete; //wait browser complate the page loading
                 wb.Navigate(site); //go to the product page
-                await Task.Delay(500); //delay for loading page
+                await Task.Delay(1000); //delay for loading page
                 await tcs.Task;
                 wb.SetBounds(10, 10, 900, 900); //set browser position and bounds
 
@@ -149,36 +89,24 @@ namespace Stocker
                 try
                 {
                     HtmlElementCollection htmlcol = wb.Document.GetElementsByTagName("select"); //get collection of all <select> items on the page
-
-                    var product = wb.Document.GetElementById(listView1.Items[i].SubItems[1].Text);
-                    string getstock = "";
                     //var helmProduct = wb.Document.GetElementsByTagName("button")["add-to-cart-button"].InnerText;  get element by name
-
-                    if (colorId != "" && sizeId != "") //if color and size id is set, then
+                    if(wb.Document.Domain == "www.6pm.com")
                     {
-                        chekStock(htmlcol, colorId, sizeId, i);
-                        if (product != null)
+                        if (colorId != "" && sizeId != "") //if color and size id is set, then
                         {
-                            getstock = product.InnerText;
-                            string txtDATA = !getstock.Contains("Out of Stock") ? "Stock exists" : "Out of Stock ";
-                            SetListview1(i, 2, txtDATA);
+                            ClickOnProduct(htmlcol, colorId, sizeId);
+                            await Task.Delay(3000); //delay for loading page
+                            var product = wb.Document.GetElementById(listView1.Items[i].SubItems[3].Text).InnerText;
+                            if (product != null)
+                            {
+                                //string txtDATA = !product.Contains("Out of Stock") ? "Stock exists" : "Out of Stock ";
+                                SetListview1(i, 2, product);
+                            }
+                        }else {
+                            SetListview1(i, 2, "set color id and size id first");
                         }
-                    }
-                    else
-                    {
-                        if (htmlcol.Count > 0) //if objects of "select" > 0, then
-                        {
-                            allColors = get6pm.GetColors(htmlcol); //get all colors
-                            allSizes = get6pm.GetSizes(htmlcol); //get all sizes
-                            chekStock(htmlcol, allColors, allSizes, i); //check if pairs of colors and sizes exists
-                        }
-                        else
-                        {
-                            getstock = product.InnerText;
-                            string txtDATA = !getstock.Contains("Out of Stock") ? "Stock exists" : "Out of Stock ";
-                            SetListview1(i, 2, txtDATA);
-                        }
-                    }
+                     }//end domain 6pm.com
+                    
                 }
                 catch (Exception ex)
                 {
@@ -244,3 +172,41 @@ namespace Stocker
 
     }
 }
+
+//method to check all color and sizes on page
+//public void chekStock(HtmlElementCollection htmlcol, NameValueCollection colors, NameValueCollection sizes, int p)
+//{
+//    string strColorSizes = "";
+//    string tmp = "";
+//    if (colors.Count > 0)
+//    {
+//        for (int i = 0; i < colors.Count; i++)
+//        {
+//            tmp = "";
+//            OptionClick1(htmlcol[0], colors.Get(i), wb, p);
+//            strColorSizes += colors.GetKey(i) + ":";
+//            for (int s = 1; s < sizes.Count; s++)
+//            {
+//                if (OptionClick1(htmlcol[1], sizes.Get(s), wb, p) == true)
+//                {
+//                    tmp += sizes.GetKey(s) + "/";
+//                }
+//            }
+//            strColorSizes += tmp + "   ";
+//            SetListview1(p, 2, strColorSizes);
+//        }
+//    }
+//    else
+//    {
+//        for (int s = 1; s < sizes.Count; s++)
+//        {
+//            if (OptionClick1(htmlcol[0], sizes.Get(s), wb, p) == true)
+//            {
+//                tmp += sizes.GetKey(s) + "/";
+//            }
+//        }
+//        strColorSizes += tmp + "   ";
+//        SetListview1(p, 2, strColorSizes);
+//    }
+
+//}

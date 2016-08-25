@@ -32,9 +32,9 @@
             this.BtnGetStock = new System.Windows.Forms.Button();
             this.listView1 = new System.Windows.Forms.ListView();
             this.columnHeaderProduct = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeaderStockId = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderURL = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderColors = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderStockId = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderColorId = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderSizeId = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -98,11 +98,6 @@
             this.columnHeaderProduct.Text = "Product name";
             this.columnHeaderProduct.Width = 120;
             // 
-            // columnHeaderStockId
-            // 
-            this.columnHeaderStockId.Text = "Stock id";
-            this.columnHeaderStockId.Width = 81;
-            // 
             // columnHeaderURL
             // 
             this.columnHeaderURL.Text = "Product URL";
@@ -112,6 +107,11 @@
             // 
             this.columnHeaderColors.Text = "Colors/Sizes in Stock";
             this.columnHeaderColors.Width = 300;
+            // 
+            // columnHeaderStockId
+            // 
+            this.columnHeaderStockId.Text = "Stock id";
+            this.columnHeaderStockId.Width = 81;
             // 
             // columnHeaderColorId
             // 
@@ -261,6 +261,7 @@
             this.tBColorId.Name = "tBColorId";
             this.tBColorId.Size = new System.Drawing.Size(140, 20);
             this.tBColorId.TabIndex = 49;
+            this.tBColorId.Text = "616693";
             // 
             // label2
             // 
@@ -279,6 +280,7 @@
             this.tBSizeId.Name = "tBSizeId";
             this.tBSizeId.Size = new System.Drawing.Size(140, 20);
             this.tBSizeId.TabIndex = 51;
+            this.tBSizeId.Text = "138541";
             // 
             // label6
             // 
