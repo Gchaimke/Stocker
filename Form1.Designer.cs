@@ -75,9 +75,9 @@
             this.listView1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeaderProduct,
-            this.columnHeaderStockId,
             this.columnHeaderURL,
             this.columnHeaderColors,
+            this.columnHeaderStockId,
             this.columnHeaderColorId,
             this.columnHeaderSizeId});
             this.listView1.ContextMenuStrip = this.contextMenuStrip1;
@@ -96,7 +96,7 @@
             // columnHeaderProduct
             // 
             this.columnHeaderProduct.Text = "Product name";
-            this.columnHeaderProduct.Width = 80;
+            this.columnHeaderProduct.Width = 120;
             // 
             // columnHeaderStockId
             // 
@@ -106,12 +106,12 @@
             // columnHeaderURL
             // 
             this.columnHeaderURL.Text = "Product URL";
-            this.columnHeaderURL.Width = 200;
+            this.columnHeaderURL.Width = 500;
             // 
             // columnHeaderColors
             // 
             this.columnHeaderColors.Text = "Colors/Sizes in Stock";
-            this.columnHeaderColors.Width = 700;
+            this.columnHeaderColors.Width = 300;
             // 
             // columnHeaderColorId
             // 

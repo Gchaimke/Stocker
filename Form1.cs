@@ -27,41 +27,12 @@ namespace Stocker
         Site_6pm get6pm = new Site_6pm();
         //Method to add products to list view
 
-        class Product{
-            public string btnId;
-            public string colorId;
-            public string sizeId;
-            public static int  prodNum =0;
-            public Product()
-            {
-                Console.WriteLine("Get data for product " + (prodNum)); //write to console product number
-                prodNum++;
-            }
-            public bool getProductStock(HtmlElementCollection htmlcol, string colorId,string sizeId, string btnId)
-            {
-                
-                htmlcol[0].Focus();
-                htmlcol[0].SetAttribute("value", colorId);
-                htmlcol[0].RaiseEvent("onChange");
-                htmlcol[0].RemoveFocus();
-
-                htmlcol[1].Focus();
-                htmlcol[1].SetAttribute("value", sizeId);
-                htmlcol[1].RaiseEvent("onChange");
-                htmlcol[1].RemoveFocus();
-                return false;
-            }
-            ~Product()
-            {
-                prodNum = 0;
-            }
-        }
         public void AddProduct()
         {
             ListViewItem product = new ListViewItem(TbProdName.Text);
-            product.SubItems.Add(tBstockId.Text);
             product.SubItems.Add(tBProductUrl.Text);
             product.SubItems.Add("Not Checked");
+            product.SubItems.Add(tBstockId.Text);
             product.SubItems.Add(tBColorId.Text);
             product.SubItems.Add(tBSizeId.Text);
             listView1.Items.Add(product);
@@ -91,7 +62,7 @@ namespace Stocker
                         }
                     }
                     strColorSizes += tmp + "   ";
-                    SetListview1(p, 3, strColorSizes);
+                    SetListview1(p, 2, strColorSizes);
                 }
             }
             else
@@ -104,7 +75,7 @@ namespace Stocker
                     }
                 }
                 strColorSizes += tmp + "   ";
-                SetListview1(p, 3, strColorSizes);
+                SetListview1(p, 2, strColorSizes);
             }
 
         }
@@ -159,8 +130,8 @@ namespace Stocker
             });
             for (int i = 0; i <= listView1.Items.Count - 1; i++) //start loop throw product lines
             {
-                string buttonId = listView1.Items[i].SubItems[1].Text;
-                string site = listView1.Items[i].SubItems[2].Text;
+                string site = listView1.Items[i].SubItems[1].Text;
+                string buttonId = listView1.Items[i].SubItems[3].Text;
                 string colorId = listView1.Items[i].SubItems[4].Text;
                 string sizeId = listView1.Items[i].SubItems[5].Text;
                 
@@ -190,7 +161,7 @@ namespace Stocker
                         {
                             getstock = product.InnerText;
                             string txtDATA = !getstock.Contains("Out of Stock") ? "Stock exists" : "Out of Stock ";
-                            SetListview1(i, 3, txtDATA);
+                            SetListview1(i, 2, txtDATA);
                         }
                     }
                     else
@@ -205,7 +176,7 @@ namespace Stocker
                         {
                             getstock = product.InnerText;
                             string txtDATA = !getstock.Contains("Out of Stock") ? "Stock exists" : "Out of Stock ";
-                            SetListview1(i, 3, txtDATA);
+                            SetListview1(i, 2, txtDATA);
                         }
                     }
                 }
@@ -246,7 +217,7 @@ namespace Stocker
 
         private void openURLInBrowserToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var url = listView1.SelectedItems[0].SubItems[2].Text;
+            var url = listView1.SelectedItems[0].SubItems[1].Text;
             System.Diagnostics.Process.Start(url);
         }
 
