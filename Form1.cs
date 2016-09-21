@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using System.Collections;
@@ -19,11 +20,10 @@ namespace Stocker
         {
             InitializeComponent();
         }
-
         NameValueCollection allColors = new NameValueCollection();
-        NameValueCollection allSizes = new NameValueCollection();
+        NameValueCollection  allSizes = new NameValueCollection();
+        Boolean haveColor, haveSize ;
         WebBrowser wb = new WebBrowser();
-        Site_6pm get6pm = new Site_6pm();
         //Method to add products to list view
 
         public void AddProduct()
@@ -32,8 +32,23 @@ namespace Stocker
             product.SubItems.Add(tBProductUrl.Text);
             product.SubItems.Add("Not Checked");
             product.SubItems.Add(tBstockId.Text);
-            product.SubItems.Add(tBColorId.Text);
-            product.SubItems.Add(tBSizeId.Text);
+            if (tBColorId.Text.Replace("  ", "") == "")
+            {
+                product.SubItems.Add("0");
+            }
+            else
+            {
+                product.SubItems.Add(tBColorId.Text);
+            }
+            if (tBSizeId.Text.Replace("  ", "") == "")
+            {
+                product.SubItems.Add("0");
+            }
+            else
+            {
+                product.SubItems.Add( tBSizeId.Text);
+            }
+
             listView1.Items.Add(product);
         }
 
@@ -41,80 +56,170 @@ namespace Stocker
         {
             listView1.Items[item].SubItems[subitem].Text = txtDATA;
         }
-        
+
         //checkstock(collection of html objects "select",color id, size id, opened web browser, current number of product in list view
         public void ClickOnProduct(HtmlElementCollection htmlcol, string colorid, string sizeid)
         {
+            //colorId
             htmlcol[0].Focus();
             htmlcol[0].SetAttribute("value", colorid);
             htmlcol[0].RaiseEvent("onChange");
             htmlcol[0].RemoveFocus();
-
+            //dimensionValues
             htmlcol[1].Focus();
             htmlcol[1].SetAttribute("value", sizeid);
             htmlcol[1].RaiseEvent("onChange");
             htmlcol[1].RemoveFocus();
         }
 
-        struct Void { }; // use an empty struct as parameter to generic TaskCompletionSource
-        public async Task DoNavigationAsync()
+        public void ClickOnProduct(HtmlElementCollection htmlcol, string sizeid)
         {
-            wb.ScriptErrorsSuppressed = true;                                           //
-            Void v;                                                                     //
-            TaskCompletionSource<Void> tcs = null;                                      //>>>> do asynchronic loading of all pages in one browser
-            WebBrowserDocumentCompletedEventHandler documentComplete = null;            //
-            documentComplete = new WebBrowserDocumentCompletedEventHandler((s, e) =>    //
-            {
-                wb.DocumentCompleted -= documentComplete;
-                tcs.SetResult(v); // continue from where awaited
-            });
-            for (int i = 0; i <= listView1.Items.Count - 1; i++) //start loop throw product lines
-            {
-                string site = listView1.Items[i].SubItems[1].Text;
-                string buttonId = listView1.Items[i].SubItems[3].Text;
-                string colorId = listView1.Items[i].SubItems[4].Text;
-                string sizeId = listView1.Items[i].SubItems[5].Text;
-                
+            htmlcol[0].Focus();
+            htmlcol[0].SetAttribute("value", sizeid);
+            htmlcol[0].RaiseEvent("onChange");
+            htmlcol[0].RemoveFocus();
+        }
 
-                tcs = new TaskCompletionSource<Void>();
-                wb.DocumentCompleted += documentComplete; //wait browser complate the page loading
-                wb.Navigate(site); //go to the product page
-                await Task.Delay(1000); //delay for loading page
-                await tcs.Task;
-                wb.SetBounds(10, 10, 900, 900); //set browser position and bounds
-
-                // do whatever you want with this instance of WB.Document
-                //Console.WriteLine("Get data for product number " + (i + 1)); //write to console product number
-
-                try
+        DateTime RoundCurrentToNextFiveMinutes()
+        {
+            DateTime now = DateTime.UtcNow,
+                result = new DateTime(now.Year, now.Month, now.Day, now.Hour, 0, 0);
+            return result.AddMinutes(((now.Minute / 5) + 1) * 5);
+        }
+        struct Void { }; // use an empty struct as parameter to generic TaskCompletionSource
+        public async Task DoNavigationAsync(CancellationToken token)
+        {
+            
+               wb.ScriptErrorsSuppressed = true;                                           //
+                Void v;                                                                     //
+                TaskCompletionSource<Void> tcs = null;                                      //>>>> do asynchronic loading of all pages in one browser
+                WebBrowserDocumentCompletedEventHandler documentComplete = null;            //
+                documentComplete = new WebBrowserDocumentCompletedEventHandler((s, e) =>    //
                 {
-                    HtmlElementCollection htmlcol = wb.Document.GetElementsByTagName("select"); //get collection of all <select> items on the page
-                    //var helmProduct = wb.Document.GetElementsByTagName("button")["add-to-cart-button"].InnerText;  get element by name
-                    if(wb.Document.Domain == "www.6pm.com")
+                    wb.DocumentCompleted -= documentComplete;
+                    tcs.SetResult(v); // continue from where awaited
+            });
+                for (int i = 0; i <= listView1.Items.Count - 1; i++) //start loop throw product lines
+                {
+                    string site = listView1.Items[i].SubItems[1].Text;
+                    string buttonId = listView1.Items[i].SubItems[3].Text;
+                    string colorId = listView1.Items[i].SubItems[4].Text;
+                    string sizeId = listView1.Items[i].SubItems[5].Text;
+
+
+                    tcs = new TaskCompletionSource<Void>();
+                    wb.DocumentCompleted += documentComplete; //wait browser complate the page loading
+                    wb.Navigate(site); //go to the product page
+                    await Task.Delay(1000); //delay for loading page
+                    await tcs.Task;
+                    wb.SetBounds(10, 10, 900, 900); //set browser position and bounds
+
+                    // do whatever you want with this instance of WB.Document
+                    //Console.WriteLine("Get data for product number " + (i + 1)); //write to console product number
+
+                    try
                     {
-                        if (colorId != "" && sizeId != "") //if color and size id is set, then
+                        SetListview1(i, 2, "Checking...");
+                    if (wb.Document.Domain == "www.6pm.com" && colorId != "" && sizeId != "") //if color and size id is set, then
+                    {
+
+                        HtmlElementCollection htmlcol = wb.Document.GetElementsByTagName("select"); //get collection of all <select> items on the page
+                        //var helmProduct = wb.Document.GetElementsByTagName("button")["add-to-cart-button"].InnerText;  get element by name
+                        GetSelect(htmlcol, colorId, sizeId);
+                        if (haveColor == true && haveSize == true)
                         {
                             ClickOnProduct(htmlcol, colorId, sizeId);
                             await Task.Delay(3000); //delay for loading page
-                            var product = wb.Document.GetElementById(listView1.Items[i].SubItems[3].Text).InnerText;
+                            var product = wb.Document.GetElementById(buttonId).InnerText;
                             if (product != null)
                             {
                                 //string txtDATA = !product.Contains("Out of Stock") ? "Stock exists" : "Out of Stock ";
                                 SetListview1(i, 2, product);
                             }
-                        }else {
-                            SetListview1(i, 2, "set color id and size id first");
                         }
-                     }//end domain 6pm.com
-                    
+                        else if (colorId == "0" && sizeId != "0")
+                        {
+                            ClickOnProduct(htmlcol, sizeId);
+                            var product = wb.Document.GetElementById(buttonId).InnerText;
+                            if (product != null)
+                            {
+                                //string txtDATA = !product.Contains("Out of Stock") ? "Stock exists" : "Out of Stock ";
+                                SetListview1(i, 2, product);
+                            }
+                        }
+
+                        else
+                        {
+                            SetListview1(i, 2, "NOT FOUND");
+                        }
+                    }
+                    else
+                    {
+                        SetListview1(i, 2, "set color id and size id first");
+                    } //end domain 6pm.com
+
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.ToString());
+                    }
+                    progressBar1.Value += 5;
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.ToString());
-                }
-                progressBar1.Value += 5;
-            }
+
+                progressBar1.Value = 100;
+                Console.WriteLine("*******Wait " + 5 + " minutes ********" );
+              
         }
+
+        public void  GetSelect(HtmlElementCollection htmlcol,string color,string size)
+        {
+            String strAllColors= "";
+            String strAllSizes = "";
+
+            //get a collection of the parent "select" elements first
+            if (color!="0" && htmlcol[0].Name == "colorId")
+            { //if the select element is the dropdown we need to select something for
+              //create another element collection for the child elements of the "select" element
+                allColors.Clear();
+                HtmlElementCollection htmlcolchild = htmlcol[0].Children;
+
+                for (int j = 0; j < htmlcolchild.Count; j++)
+                {
+                    allColors.Add(htmlcolchild[j].InnerText, htmlcolchild[j].GetAttribute("value"));
+                    strAllColors += htmlcolchild[j].GetAttribute("value") + "/";
+                }
+            }           
+
+            if (size != "0" && htmlcol[0].Name == "dimensionValues")
+            {
+                allSizes.Clear();
+                HtmlElementCollection htmlcolchild = htmlcol[0].Children;
+                for (int j = 0; j < htmlcolchild.Count; j++)
+                {
+                    allSizes.Add(htmlcolchild[j].InnerText, htmlcolchild[j].GetAttribute("value"));
+                    strAllSizes  += htmlcolchild[j].GetAttribute("value")+"/";
+                }
+            } else if (size != "0" &&  htmlcol[1].Name == "dimensionValues")
+            {
+                allSizes.Clear();
+                HtmlElementCollection htmlcolchild = htmlcol[1].Children;
+                for (int j = 0; j < htmlcolchild.Count; j++)
+                {
+                    allSizes.Add(htmlcolchild[j].InnerText, htmlcolchild[j].GetAttribute("value"));
+                    strAllSizes += htmlcolchild[j].GetAttribute("value") + "/";
+                }
+            }
+
+            haveColor = (strAllColors.Contains(color)) ? true : false;
+            haveSize = (strAllSizes.Contains(size)) ? true : false;
+
+            for (int s = 0; s < allSizes.Count; s++) Console.WriteLine(allSizes.Get(s) + "=" + allSizes.GetKey(s));
+            for (int s = 0; s < allColors.Count; s++) Console.WriteLine(allColors.Get(s) + "=" + allColors.GetKey(s));
+            Console.WriteLine("Color found = " + haveColor + " Size found = " + haveSize);
+            Console.WriteLine("******************************end loop******************************");
+
+        }
+
 
         private void BtnAddProd_Click(object sender, EventArgs e)
         {
@@ -124,11 +229,12 @@ namespace Stocker
         private void BtnGetStock_Click(object sender, EventArgs e)
         {
             progressBar1.Value = 10;
-            var task = DoNavigationAsync();
+            CancellationTokenSource tokenSource = new CancellationTokenSource();
+            var task = DoNavigationAsync(tokenSource.Token);
             task.ContinueWith((t) =>
             {
-                //MessageBox.Show("Navigation done!");
-                progressBar1.Value = 100;
+                Console.WriteLine ("Navigation done!");
+                                
             }, TaskScheduler.FromCurrentSynchronizationContext());
         }
 
@@ -169,7 +275,10 @@ namespace Stocker
             Properties.Settings.Default.Save();
         }
 
-
+        private void btnStop_Click(object sender, EventArgs e)
+        {
+           // cancelToken = true;
+        }
     }
 }
 
