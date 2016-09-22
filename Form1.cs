@@ -99,7 +99,8 @@ namespace Stocker
                     wb.DocumentCompleted -= documentComplete;
                     tcs.SetResult(v); // continue from where awaited
             });
-                for (int i = 0; i <= listView1.Items.Count - 1; i++) //start loop throw product lines
+            
+            for (int i = 0; i <= listView1.Items.Count - 1; i++) //start loop throw product lines
                 {
                     string site = listView1.Items[i].SubItems[1].Text;
                     string buttonId = listView1.Items[i].SubItems[3].Text;
@@ -107,7 +108,7 @@ namespace Stocker
                     string sizeId = listView1.Items[i].SubItems[5].Text;
 
 
-                    tcs = new TaskCompletionSource<Void>();
+                        tcs = new TaskCompletionSource<Void>();
                     wb.DocumentCompleted += documentComplete; //wait browser complate the page loading
                     wb.Navigate(site); //go to the product page
                     await Task.Delay(1000); //delay for loading page
@@ -137,7 +138,7 @@ namespace Stocker
                                 SetListview1(i, 2, product);
                             }
                         }
-                        else if (colorId == "0" && sizeId != "0")
+                        else if (colorId == "0" || sizeId != "0")
                         {
                             ClickOnProduct(htmlcol, sizeId);
                             var product = wb.Document.GetElementById(buttonId).InnerText;
@@ -147,7 +148,6 @@ namespace Stocker
                                 SetListview1(i, 2, product);
                             }
                         }
-
                         else
                         {
                             SetListview1(i, 2, "NOT FOUND");
@@ -167,9 +167,8 @@ namespace Stocker
                 }
 
                 progressBar1.Value = 100;
-                Console.WriteLine("*******Wait " + 5 + " minutes ********" );
-              
-        }
+            }
+        
 
         public void  GetSelect(HtmlElementCollection htmlcol,string color,string size)
         {
@@ -275,12 +274,49 @@ namespace Stocker
             Properties.Settings.Default.Save();
         }
 
+        public void click_me()
+        {
+
+            BtnGetStock.PerformClick();
+        }
+
         private void btnStop_Click(object sender, EventArgs e)
         {
-           // cancelToken = true;
+            // cancelToken = true;
+            click_me();
         }
     }
 }
+
+//----------------how to add scheduler---------------------------
+//using System;
+//using Microsoft.Win32.TaskScheduler; 
+
+//class Program
+//{
+//    static void Main(string[] args)
+//    {
+//        Get the service on the local machine
+//        using (TaskService ts = new TaskService())
+//        {
+//            Create a new task definition and assign properties
+//            TaskDefinition td = ts.NewTask();
+//            td.RegistrationInfo.Description = "Does something";
+
+//            Create a trigger that will fire the task at this time every other day
+//            td.Triggers.Add(new DailyTrigger { DaysInterval = 2 });
+
+//            Create an action that will launch Notepad whenever the trigger fires
+//            td.Actions.Add(new ExecAction("notepad.exe", "c:\\test.log", null));
+
+//            Register the task in the root folder
+//            ts.RootFolder.RegisterTaskDefinition(@"Test", td);
+
+//            Remove the task we just created
+//            ts.RootFolder.DeleteTask("Test");
+//        }
+//    }
+//}
 
 //method to check all color and sizes on page
 //public void chekStock(HtmlElementCollection htmlcol, NameValueCollection colors, NameValueCollection sizes, int p)
