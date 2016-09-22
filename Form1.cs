@@ -274,17 +274,7 @@ namespace Stocker
             Properties.Settings.Default.Save();
         }
 
-        public void click_me()
-        {
-
-            BtnGetStock.PerformClick();
-        }
-
-        private void btnStop_Click(object sender, EventArgs e)
-        {
-            // cancelToken = true;
-            click_me();
-        }
+       
     }
 }
 
